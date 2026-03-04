@@ -17,15 +17,16 @@ app = "umami-b9tw8g"
   force_https = true
   auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
 
+  # Use /script.js - / may redirect to login (302), which fails health checks
   # Umami runs migrations at startup - needs 90s+ before it can serve traffic
   [[http_service.checks]]
   grace_period = "90s"
   interval = "15s"
   method = "GET"
   timeout = "10s"
-  path = "/"
+  path = "/script.js"
 
 # Disable release_command - Umami runs migrations at startup via check-db
 [deploy]
