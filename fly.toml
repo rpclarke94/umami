@@ -2,6 +2,9 @@
 # Migrations run at app startup via check-db, so we skip the release_command
 app = "umami-b9tw8g"
 
+[[vm]]
+  memory = "512mb"
+
 [build]
   dockerfile = "Dockerfile"
 
@@ -16,6 +19,15 @@ app = "umami-b9tw8g"
   auto_start_machines = true
   min_machines_running = 0
 
+  # Umami runs migrations at startup - needs 90s+ before it can serve traffic
+  [[http_service.checks]]
+  grace_period = "90s"
+  interval = "15s"
+  method = "GET"
+  timeout = "10s"
+  path = "/"
+
 # Disable release_command - Umami runs migrations at startup via check-db
 [deploy]
   release_command = "true"
+  wait_timeout = "10m"
